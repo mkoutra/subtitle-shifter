@@ -10,13 +10,9 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Funnel+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 
-    <style>
-        body {
-            font-family: "Roboto Slab", serif;
-        }
-    </style>
+    <link href="../static/css/font.css" rel="stylesheet">
 </head>
 
 <body class="container-lg mt-1 bg-light-subtle">
@@ -34,21 +30,6 @@
                     aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
-                <!-- <div class="collapse navbar-collapse ms-3" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">About</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">Contact</a>
-                        </li>
-                    </ul>
-                </div> -->
-
             </div>
         </nav>
     </header>
@@ -56,9 +37,9 @@
     <main>
         <div class="container-md my-1 bg-light">
             <div class="row">
-                <h4 class="text-center">
+                <h3 class="text-center">
                     Synchronize the subtitles by shifting the timestamps of the subtitle file.
-                </h4>
+                </h3>
             </div>
 
             <div class="row my-2">
@@ -66,18 +47,18 @@
                     <div class="mb-3">
                         <label for="subtitleFile" class="form-label">Upload Subtitle File (.srt)</label>
                         <input type="file" class="form-control" id="subtitleFile" name="subtitleFile" accept=".srt" required>
-                        <span class="small">Max size: 5 MB</span>
+                        <p class="small mt-1 ms-1">Maximum file size: 2 MB</p>
                     </div>
                     <div class="mb-3">
                         <label for="timeShift" class="form-label">Time Shift (ms)</label>
                         <input type="number" class="form-control" id="timeShift" name="timeShift" step="100" required>
                         <ul class="my-2">
-                            <li class="mb-1">If the subtitle appears too early, enter a positive number.</li>
-                            <li>If the subtitle appears too late, enter a negative number.</li>
+                            <li class="mb-1">If the subtitle appears too early, enter a <span class="fst-italic">positive</span> number.</li>
+                            <li>If the subtitle appears too late, enter a <span class="fst-italic">negative</span> number.</li>
                         </ul>
                     </div>
                     <div class="mb-3">
-                        <button type="submit" class="btn btn-info rounded-pill w-100">Resync</button>
+                        <button type="submit" class="btn btn-info rounded-pill w-100">Synchronize & Download</button>
                     </div>
                 </form>
             </div>
@@ -87,7 +68,7 @@
     <footer>
         <div class=" text-center my-2">
             <span class="fs-6">
-                Created by Michail Koutrakis. &copy 2025
+                &copy 2025  Michail Koutrakis
             </span>
         </div>
     </footer>
