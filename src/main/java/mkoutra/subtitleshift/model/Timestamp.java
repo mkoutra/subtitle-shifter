@@ -1,4 +1,4 @@
-package mkoutra.subtitleshift.entity;
+package mkoutra.subtitleshift.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

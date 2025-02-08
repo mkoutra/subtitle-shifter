@@ -1,4 +1,4 @@
-package mkoutra.subtitleshift.entity;
+package mkoutra.subtitleshift.model;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
