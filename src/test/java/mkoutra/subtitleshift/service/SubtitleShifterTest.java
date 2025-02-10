@@ -16,6 +16,6 @@ class SubtitleShifterTest {
 
     @Test
     public void testSubtitleReading() throws IOException {
-        subtitleShifter.applyShift("Fallen1.srt", "-399");
+        subtitleShifter.applyShift("Fallen1.srt", "123");
     }
 }

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="https://thymeleaf.org" lang="en">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Online Subtitle Shifter</title>
 
-    <link href="../static/css/bootstrap.min.css" rel="stylesheet"/>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -43,7 +43,7 @@
             </div>
 
             <div class="row my-2">
-                <form action="/" method="POST" class="col-lg-6 mx-auto" enctype="multipart/form-data">
+                <form action="/upload" method="POST" class="col-lg-6 mx-auto" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="subtitleFile" class="form-label">Upload Subtitle File (.srt)</label>
                         <input type="file" class="form-control" id="subtitleFile" name="subtitleFile" accept=".srt" required>
@@ -51,7 +51,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="timeShift" class="form-label">Time Shift (ms)</label>
-                        <input type="number" class="form-control" id="timeShift" name="timeShift" step="100" required>
+                        <input type="number" class="form-control" id="timeShift" name="timeshift" step="100" required>
                         <ul class="my-2">
                             <li class="mb-1">If the subtitle appears too early, enter a <span class="fst-italic">positive</span> number.</li>
                             <li>If the subtitle appears too late, enter a <span class="fst-italic">negative</span> number.</li>
@@ -74,5 +74,5 @@
     </footer>
 </body>
 
-<script src="../static/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 </html>
