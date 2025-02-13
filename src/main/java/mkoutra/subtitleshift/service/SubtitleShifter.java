@@ -3,12 +3,14 @@ package mkoutra.subtitleshift.service;
 import lombok.RequiredArgsConstructor;
 import mkoutra.subtitleshift.model.Attachment;
 import mkoutra.subtitleshift.model.Timestamp;
+import org.apache.tika.parser.txt.CharsetDetector;
+import org.apache.tika.parser.txt.CharsetMatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
@@ -42,31 +44,7 @@ public class SubtitleShifter {
 
         Path inputPath = attachment.getFilepath();                                              // Input file path
         Path outputPath = storageService.getOutputPath(attachment.getSavedName(), timeshift);   // Output file path
-        String line;
-
-        try (
-             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputPath.toFile()), StandardCharsets.UTF_8));
-             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputPath.toFile()), StandardCharsets.UTF_8))
-        ) {
-//            BufferedReader reader = new BufferedReader(new FileReader(inputPath.toFile(), StandardCharsets.UTF_8));
-//             PrintWriter writer = new PrintWriter(new FileWriter(outputPath.toFile(), StandardCharsets.UTF_8))) {
-            while ((line = reader.readLine()) != null) {
-                if (isTimeLine(line)) {
-                    String shiftedTimeLine = getShiftedTimeLine(line, timeshift);
-//                    writer.println(shiftedTimeLine);
-                    writer.write(shiftedTimeLine);
-                    writer.newLine();
-                    continue;
-                }
-                System.out.println(line);
-//                writer.println(line);
-                writer.write(line);
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage());
-            throw e;
-        }
+        createShiftedFile(inputPath, outputPath, timeshift);
     }
 
     /**
@@ -86,23 +64,49 @@ public class SubtitleShifter {
 
         Path inputPath = storageService.getInputPath(inputFilename);               // Input file path
         Path outputPath = storageService.getOutputPath(inputFilename, timeshift);  // Output file path
-        String line;
+        createShiftedFile(inputPath, outputPath, timeshift);
+    }
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(inputPath.toFile()));
-             PrintWriter writer = new PrintWriter(new FileWriter(outputPath.toFile()))) {
+    /**
+     * Reads a subtitle file, applies a time shift to timestamp lines, and writes the result to a new file.
+     *
+     * @param inputPath  The path to the original subtitle file.
+     * @param outputPath The path where the modified file will be saved.
+     * @param timeshift  The time shift (in milliseconds) to apply to the timestamps.
+     * @throws IOException If an error occurs while reading or writing the file.
+     */
+    private void createShiftedFile(Path inputPath, Path outputPath, String timeshift) throws IOException {
+        Charset charset = getCharset(inputPath.toFile());
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputPath.toFile(), charset));
+             PrintWriter writer = new PrintWriter(new FileWriter(outputPath.toFile(), charset))) {
+
+            String line;
             while ((line = reader.readLine()) != null) {
                 if (isTimeLine(line)) {
                     String shiftedTimeLine = getShiftedTimeLine(line, timeshift);
                     writer.println(shiftedTimeLine);
                     continue;
                 }
-
                 writer.println(line);
             }
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
             throw e;
         }
+    }
+
+    /**
+     * Detects the most probable character encoding of the given file.
+     *
+     * @param file The file whose encoding needs to be determined.
+     * @return The detected Charset of the file.
+     * @throws IOException If an error occurs while reading the file.
+     */
+    private Charset getCharset(File file) throws IOException {
+        CharsetDetector charsetDetector = new CharsetDetector();
+        charsetDetector.setText(new BufferedInputStream(new FileInputStream(file)));
+        CharsetMatch match = charsetDetector.detect();
+        return Charset.forName(match.getNormalizedName());
     }
 
     /**
