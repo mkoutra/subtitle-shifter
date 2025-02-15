@@ -43,11 +43,11 @@
             </div>
 
             <div class="row my-2">
-                <form action="/upload" method="POST" class="col-lg-6 mx-auto" enctype="multipart/form-data">
+                <form action="/uploadAndShift" method="POST" class="col-lg-6 mx-auto" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="subtitleFile" class="form-label">Upload Subtitle File (.srt)</label>
                         <input type="file" class="form-control" id="subtitleFile" name="subtitleFile" accept=".srt" required>
-                        <p class="small mt-1 ms-1">Maximum file size: 2 MB</p>
+                        <p class="small mt-1 ms-1">Maximum file size: 1 MB</p>
                     </div>
                     <div class="mb-3">
                         <label for="timeShift" class="form-label">Time Shift (ms)</label>
@@ -58,7 +58,7 @@
                         </ul>
                     </div>
                     <div class="mb-3">
-                        <button type="submit" class="btn btn-info rounded-pill w-100">Synchronize & Download</button>
+                        <button type="submit" class="btn btn-info rounded-pill w-100">Upload & Shift</button>
                     </div>
                 </form>
             </div>
@@ -68,7 +68,7 @@
     <footer>
         <div class=" text-center my-2">
             <span class="fs-6">
-                &copy 2025  Michail Koutrakis
+                &copy 2025 Michail Koutrakis
             </span>
         </div>
     </footer>

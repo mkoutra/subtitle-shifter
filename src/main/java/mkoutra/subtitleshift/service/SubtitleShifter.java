@@ -1,6 +1,7 @@
 package mkoutra.subtitleshift.service;
 
 import lombok.RequiredArgsConstructor;
+import mkoutra.subtitleshift.exceptions.StorageException;
 import mkoutra.subtitleshift.model.Attachment;
 import mkoutra.subtitleshift.model.Timestamp;
 import org.apache.tika.parser.txt.CharsetDetector;
@@ -8,6 +9,7 @@ import org.apache.tika.parser.txt.CharsetMatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -27,6 +29,16 @@ public class SubtitleShifter {
 
     private final StorageService storageService;
 
+    public Attachment getShiftedFile(MultipartFile file, String timeshift) throws IOException, StorageException {
+        if (!timeshift.matches("^-?\\d+$")) {
+            LOGGER.error("Invalid timeshift: {}", timeshift);
+            throw new IllegalArgumentException("Invalid timeshift: " + timeshift);
+        }
+
+        Attachment attachment = storageService.store(file); // Save the file
+        return applyShift(attachment, timeshift);
+    }
+
     /**
      * Applies a time shift to the timestamps in a subtitle file
      * and writes the modified content to a new file.
@@ -36,35 +48,16 @@ public class SubtitleShifter {
      * @throws IOException              If an error occurs while reading or writing the file.
      * @throws IllegalArgumentException If the timeshift value is invalid.
      */
-    public void applyShift(Attachment attachment, String timeshift) throws IOException {
-        if (!timeshift.matches("^-?\\d+$")) {
-            LOGGER.error("Invalid timeshift: {}", timeshift);
-            throw new IllegalArgumentException("Invalid timeshift: " + timeshift);
-        }
-
+    public Attachment applyShift(Attachment attachment, String timeshift) throws IOException {
         Path inputPath = attachment.getFilepath();                                              // Input file path
         Path outputPath = storageService.getOutputPath(attachment.getSavedName(), timeshift);   // Output file path
         createShiftedFile(inputPath, outputPath, timeshift);
-    }
 
-    /**
-     * Applies a time shift to the timestamps in a subtitle file
-     * and writes the modified content to a new file.
-     *
-     * @param inputFilename             The name of the input subtitle file.
-     * @param timeshift                 The time shift in milliseconds (e.g., "2000" or "-1500").
-     * @throws IOException              If an error occurs while reading or writing the file.
-     * @throws IllegalArgumentException If the timeshift value is invalid.
-     */
-    public void applyShift(String inputFilename, String timeshift) throws IOException {
-        if (!timeshift.matches("^-?\\d+$")) {
-            LOGGER.error("Invalid timeshift: {}", timeshift);
-            throw new IllegalArgumentException("Invalid timeshift: " + timeshift);
-        }
-
-        Path inputPath = storageService.getInputPath(inputFilename);               // Input file path
-        Path outputPath = storageService.getOutputPath(inputFilename, timeshift);  // Output file path
-        createShiftedFile(inputPath, outputPath, timeshift);
+        // Shifted file
+        Attachment shiftedFileAttachment = new Attachment(attachment);
+        shiftedFileAttachment.setFilepath(outputPath);
+        shiftedFileAttachment.setSavedName(outputPath.getFileName().toString());
+        return shiftedFileAttachment;
     }
 
     /**

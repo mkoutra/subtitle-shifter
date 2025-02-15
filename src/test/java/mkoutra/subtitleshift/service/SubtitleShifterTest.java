@@ -1,6 +1,7 @@
 package mkoutra.subtitleshift.service;
 
 import mkoutra.subtitleshift.config.StorageProperties;
+import mkoutra.subtitleshift.model.Attachment;
 import org.apache.tika.Tika;
 import org.apache.tika.parser.txt.CharsetDetector;
 import org.apache.tika.parser.txt.CharsetMatch;
@@ -10,7 +11,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,7 +29,15 @@ class SubtitleShifterTest {
 
     @Test
     public void testSubtitleReading() throws IOException {
-        subtitleShifter.applyShift("Fallen1.srt", "123");
+        Attachment attachment = new Attachment();
+        attachment.setUuid(UUID.randomUUID());
+        attachment.setOriginalFileName("Fallen1.srt");
+        attachment.setSavedName("Fallen1.srt");
+        attachment.setExtension(".srt");
+        Path filepath = Paths.get(storageProperties.getUploadDir(), attachment.getSavedName());
+        attachment.setFilepath(filepath);
+
+        subtitleShifter.applyShift(attachment, "1234");
     }
 
     @Test
