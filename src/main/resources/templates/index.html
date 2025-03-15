@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="https://thymeleaf.org" lang="en">
+<html xmlns:th="https://thymeleaf.org" lang="el">
 
 <head>
     <meta charset="UTF-8" />
@@ -21,7 +21,7 @@
             <div class="container-fluid">
                 <div>
                     <a class="navbar-brand" href="#">
-                        <span class="display-5">Subtitle shifter</span>
+                        <span class="display-5" th:text="#{app.title}"></span>
                     </a>
                 </div>
 
@@ -38,27 +38,29 @@
         <div class="container-md my-1 bg-light">
             <div class="row">
                 <h3 class="text-center">
-                    Synchronize the subtitles by shifting the timestamps of the subtitle file.
+                    <span th:text="#{app.description}"></span>
                 </h3>
             </div>
 
             <div class="row my-2">
                 <form action="/uploadAndShift" method="POST" class="col-lg-6 mx-auto" enctype="multipart/form-data">
                     <div class="mb-3">
-                        <label for="subtitleFile" class="form-label">Upload Subtitle File (.srt)</label>
+                        <label for="subtitleFile" class="form-label" th:text="#{upload.subtitle}"></label>
                         <input type="file" class="form-control" id="subtitleFile" name="subtitleFile" accept=".srt" required>
-                        <p class="small mt-1 ms-1">Maximum file size: 1 MB</p>
+                        <p class="small mt-1 ms-1" th:text="#{file.max.size}"></p>
                     </div>
                     <div class="mb-3">
-                        <label for="timeShift" class="form-label">Time Shift (ms)</label>
+                        <label for="timeShift" class="form-label" th:text="#{timeshift.msg}"></label>
                         <input type="number" class="form-control" id="timeShift" name="timeshift" step="100" required>
                         <ul class="my-2">
-                            <li class="mb-1">If the subtitle appears too early, enter a <span class="fst-italic">positive</span> number.</li>
-                            <li>If the subtitle appears too late, enter a <span class="fst-italic">negative</span> number.</li>
+<!--                            <li class="mb-1" th:text="#{instructions.positive.shift}">If the subtitle appears too early, enter a <span class="fst-italic">positive</span> number.</li>-->
+                            <li class="mb-1" th:text="#{instructions.positive.shift}"></li>
+                            <li class="mb-1" th:text="#{instructions.negative.shift}"></li>
+                            <!--                            <li>If the subtitle appears too late, enter a <span class="fst-italic">negative</span> number.</li>-->
                         </ul>
                     </div>
                     <div class="mb-3">
-                        <button type="submit" class="btn btn-info rounded-pill w-100">Upload & Shift</button>
+                        <button type="submit" class="btn btn-info rounded-pill w-100" th:text="#{button.upload}"></button>
                     </div>
                 </form>
             </div>
@@ -66,10 +68,17 @@
     </main>
 
     <footer>
-        <div class=" text-center my-2">
-            <span class="fs-6">
-                &copy 2025 Michail Koutrakis
-            </span>
+        <div class="my-2">
+            <div class="fs-6 d-flex justify-content-around align-content-center">
+                <div>
+                    &copy 2025 Michail Koutrakis
+                </div>
+
+                <div class="d-flex">
+                    <a href="?lang=en" class="mb-2">English</a>
+                    <a href="?lang=el" class="ms-2">Ελληνικά</a>
+                </div>
+            </div>
         </div>
     </footer>
 </body>

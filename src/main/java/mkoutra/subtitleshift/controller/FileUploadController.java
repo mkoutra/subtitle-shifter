@@ -3,7 +3,6 @@ package mkoutra.subtitleshift.controller;
 import lombok.RequiredArgsConstructor;
 import mkoutra.subtitleshift.exceptions.StorageException;
 import mkoutra.subtitleshift.model.Attachment;
-import mkoutra.subtitleshift.service.StorageService;
 import mkoutra.subtitleshift.service.SubtitleShifter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +30,7 @@ public class FileUploadController {
 
     @PostMapping(value = "/uploadAndShift", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<Resource> uploadAndShiftSubtitle(@RequestParam("subtitleFile") MultipartFile originalFile,
-                                                     @RequestParam("timeshift") String timeshift)
+                                                     @RequestParam("timeshift.msg") String timeshift)
             throws StorageException, IOException {
 
         // Validate timeshift
