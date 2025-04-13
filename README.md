@@ -20,7 +20,7 @@ Easily adjust subtitle timings by uploading your `.srt` file, specifying the tim
     gradlew.bat bootRun 
     ```
 
-3. Open your favorite browser and visit `http://localhost:8080`. You should see the interface as shown in the screenshot below.
+3. Open your favourite browser and visit `http://localhost:8080`. You should see the interface as shown in the screenshot below.
 
 ## Screenshot
 ![Subtitle_Shifter.png](assets/Subtitle_Shifter.png)
